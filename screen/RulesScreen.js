@@ -4,7 +4,6 @@ import { StyleSheet, View, Text, Animated } from 'react-native';
 import Rule from '../components/Rule';
 import SubTitle from '../components/SubTitle';
 import IconButton from '../components/ui/IconButton';
-import { Colors } from '../constants/colors';
 import { RULES, GOAL } from '../constants/rules';
 
 function GoalPage({ onPress, backButton }) {

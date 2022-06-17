@@ -3,13 +3,14 @@ import { useIsFocused } from '@react-navigation/native';
 import { View, Text, FlatList, StyleSheet } from 'react-native';
 import SubTitle from '../components/SubTitle';
 import PastGameElement from '../components/PastGameElement';
+import IconButton from '../components/ui/IconButton';
 
 import { fetchGames, deleteGame } from '../util/database';
 import { Game } from '../models/game';
 
 let index = 0;
 
-function PastGameScreen() {
+function PastGameScreen({ navigation }) {
     const [loadedGames, setLoadedGames] = useState([]);
     const isFocused = useIsFocused();
 
@@ -22,6 +23,10 @@ function PastGameScreen() {
         const games = await fetchGames();
         games.push(new Game(-1, '', 0, 0));
         setLoadedGames(games);
+    }
+
+    function backButtonHandler() {
+        navigation.navigate('TitlePage');
     }
     
     useEffect(() => {
@@ -40,6 +45,8 @@ function PastGameScreen() {
 
     return (
         <View style={styles.rootContainer}>
+            <IconButton icon='close' size={20} onPress={backButtonHandler}
+                    outerBtnStyles={styles.backOuterButton} />
             <View style={styles.title}>
                 <SubTitle text='PREVIOUS ' />
                 <SubTitle text='GAMES' />
@@ -72,5 +79,12 @@ const styles = StyleSheet.create({
     listContainer: {
         alignItems: 'center',
         marginHorizontal: 16
+    },
+    backOuterButton: {
+        width: 50,
+        height: 50,
+        borderRadius: 50,
+        borderWidth: 3,
+        margin: 5
     }
 });

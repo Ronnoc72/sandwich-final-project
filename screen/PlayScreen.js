@@ -11,6 +11,7 @@ import CustomButton from '../components/ui/CustomButton';
 import cardsArray from '../constants/cards';
 import { key } from '../constants/cards';
 import { Game } from '../models/game';
+import { Colors } from '../constants/colors';
 
 function shuffle(array) {
     let currentIndex = array.length, randomIndex;
@@ -166,6 +167,7 @@ function PlayScreen() {
     }, [makeSliding[0]]);
 
     function faceCardTimer(cardCount, newPlayerTurn, playerArray) {
+        setCantPress(false);
         let turnIndex = 0;
         let innerTimer;
         const timer = setInterval(() => {
@@ -255,27 +257,15 @@ function PlayScreen() {
         setCantPress(true);
     }
 
-    function checkingSlap(p) {
-        if (p) {
-            for (let i = 0; i < pureCards.length; i++) {
-                playerOneCards.push(pureCards[i]);
-            }
-        } else {
-            for (let i = 0; i < pureCards.length; i++) {
-                playerTwoCards.push(pureCards[i]);
-            }
-        }
-    }
-
     function slap(player) {
         setAmountSlapped(amountSlapped + 1);
         if (pureCards.length == 0 || pureCards.length == 1) return;
         const slapCard = pureCards[pureCards.length-1];
         if (pureCards[pureCards.length-2][1] == slapCard[1]) {
-            checkingSlap(player);
+            setAddNewCards(true);
             if (pureCards.length > 2) {
                 if (pureCards[pureCards.length-3][1] == slapCard[1]) {
-                    checkingSlap(player);
+                    setAddNewCards(true);
                 }
             }
             setPureCards([]);
@@ -325,6 +315,10 @@ function PlayScreen() {
         <View style={styles.gameContainer}>
             {/* Player Two Section */}
             <View style={styles.slides}>
+                <View style={[styles.playerCard, {left: windowWidth-100, top: 20, transform: [{rotate: '180deg'}]}]}>
+                    <Text style={[styles.playerCardText, {fontWeight: 'bold'}]}>Cards: </Text>
+                    <Text style={[styles.playerCardText, {color: Colors.green100}]}>{playerTwoCards.length}</Text>
+                </View>
                 <Hand handRotation={{transform: [{rotate: '0deg'}]}} slideCard={slideCardHandler} 
                     isDisabled={faceCard.length > 0 || cantPress} />
                 <IconButton icon='star' size={36} 
@@ -332,12 +326,9 @@ function PlayScreen() {
                     onPress={() => {
                         slap(0);
                     }} isDisabled={cantPress || faceCard.length > 0} />
-                <Text>{playerTwoCards.length}</Text>
-                <Text>{faceCard.length}</Text>
             </View>
             {/* Player One Section */}
             <View style={styles.slides}>
-                <Text>{playerOneCards.length}</Text>
                 <IconButton icon='star' size={36} 
                     outerBtnStyles={{width: 100, height: 100, justifyContent: 'center', alignItems: 'center', left: windowWidth-100}}
                     onPress={() => {
@@ -345,6 +336,10 @@ function PlayScreen() {
                     }} isDisabled={cantPress || faceCard.length > 0} />
                 <Hand handRotation={{transform: [{rotate: '180deg'}]}} slideCard={slideCardHandler}
                     isDisabled={faceCard.length > 0 || cantPress} />
+                <View style={[styles.playerCard, {bottom: 10, left: 10}]}>
+                    <Text style={[styles.playerCardText, {fontWeight: 'bold'}]}>Cards: </Text>
+                    <Text style={[styles.playerCardText, {color: Colors.green100}]}>{playerOneCards.length}</Text>
+                </View>
             </View>
             {cards.map(elm => elm)}
             {slidingCard}
@@ -363,6 +358,10 @@ const styles = StyleSheet.create({
     slides: {
         
     },
+    playerCardText: {
+        fontSize: 20,
+        color: Colors.gray100
+    },
     gameOverContainer: {
         flex: 1,
         position: 'absolute',
@@ -379,5 +378,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         fontSize: 42
+    },
+    playerCard: {
+        position: 'absolute',
+        flexDirection: 'row',
+        backgroundColor: Colors.green50,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 8,
+        elevation: 4,
+        shadowColor: 'black'
     }
 });

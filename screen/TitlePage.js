@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
 import CustomButton from '../components/ui/CustomButton';
 import MainTitle from '../components/MainTitle';
@@ -52,15 +52,18 @@ const styles = StyleSheet.create({
     generalButtonText: {
         color: 'black',
         textAlign: 'center',
-        fontSize: 26
+        fontSize: 26,
+        color: Colors.gainsboro,
+        fontWeight: 'bold'
     },
     generalButton: {
         width: 200,
         borderRadius: 8
     },
     generalOuterButton: {
-        marginTop: 16,
+        marginTop: 32,
         elevation: 4,
-        shadowColor: 'black'
+        shadowColor: 'black',
+        paddingVertical: 26
     }
 });
